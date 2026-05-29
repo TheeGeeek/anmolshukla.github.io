@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Anmol Shukla — Developer & Import-Export Consultant. Building businesses, digital experiences, and innovative solutions.">
+<meta name="keywords" content="Anmol Shukla, Developer, Import Export Consultant, Web Development, Python, AI, Business">
+<title>Anmol Shukla — Developer & Import-Export Consultant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050816;
+  --surface:#0F172A;
+  --surface2:#111827;
+  --primary:#3B82F6;
+  --accent:#06B6D4;
+  --purple:#8B5CF6;
+  --text:#F8FAFC;
+  --muted:#94A3B8;
+  --border:rgba(255,255,255,0.06);
+  --glass:rgba(15,23,42,0.7);
+}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--primary) var(--surface)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:2px}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-weight:400;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* CURSOR */
+#cursor{position:fixed;width:10px;height:10px;background:var(--primary);border-radius:50%;pointer-events:none;z-index:9999;transition:transform 0.15s ease,opacity 0.3s;mix-blend-mode:screen}
+#cursor-follower{position:fixed;width:36px;height:36px;border:1px solid rgba(59,130,246,0.4);border-radius:50%;pointer-events:none;z-index:9998;transition:transform 0.08s linear,opacity 0.3s;mix-blend-mode:screen}
+a,button,[data-magnetic]{cursor:none}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:10000;display:flex;align-items:center;justify-content:center;transition:opacity 0.8s ease,visibility 0.8s ease}
+#loader.hidden{opacity:0;visibility:hidden}
+.loader-inner{text-align:center}
+.loader-name{font-family:'Syne',sans-serif;font-size:clamp(2rem,6vw,5rem);font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#fff 0%,var(--primary) 50%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;transform:translateY(20px);animation:fadeUp 0.6s 0.3s ease forwards}
+.loader-bar{width:200px;height:2px;background:var(--border);border-radius:2px;margin:2rem auto 0;overflow:hidden}
+.loader-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:2px;width:0;animation:loadBar 1.8s ease forwards}
+@keyframes loadBar{to{width:100%}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.25rem 0;transition:all 0.4s ease}
+nav.scrolled{background:rgba(5,8,22,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0.85rem 0}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-0.02em;background:linear-gradient(135deg,#fff,var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.875rem;font-weight:500;letter-spacing:0.02em;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--primary);color:#fff!important;padding:0.5rem 1.25rem;border-radius:100px;font-size:0.8rem!important;transition:all 0.2s!important}
+.nav-cta:hover{background:#2563EB;transform:translateY(-1px);box-shadow:0 8px 20px rgba(59,130,246,0.35)!important}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:4px}
+.nav-hamburger span{display:block;width:22px;height:1.5px;background:var(--muted);border-radius:2px;transition:all 0.3s}
+
+/* MOBILE NAV */
+@media(max-width:768px){
+  .nav-links{display:none;position:fixed;inset:0;background:rgba(5,8,22,0.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;z-index:999}
+  .nav-links.open{display:flex}
+  .nav-links a{font-size:1.5rem!important}
+  .nav-hamburger{display:flex;z-index:1001}
+}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:8rem 2rem 4rem}
+.hero-canvas{position:absolute;inset:0;z-index:0}
+.hero-content{position:relative;z-index:1;text-align:center;max-width:900px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);border-radius:100px;padding:0.35rem 1rem;font-size:0.75rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--primary);margin-bottom:2rem;animation:fadeUp 0.8s 0.2s ease both}
+.hero-badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}
+.hero-name{font-family:'Syne',sans-serif;font-size:clamp(3.5rem,10vw,9rem);font-weight:800;letter-spacing:-0.04em;line-height:0.9;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.85) 40%,var(--primary) 70%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:fadeUp 0.8s 0.4s ease both;margin-bottom:1.5rem}
+.hero-tagline{font-size:clamp(0.85rem,2vw,1rem);color:var(--accent);font-weight:500;letter-spacing:0.15em;text-transform:uppercase;animation:fadeUp 0.8s 0.6s ease both;margin-bottom:1.5rem}
+.hero-sub{font-size:clamp(1rem,2.5vw,1.35rem);color:var(--muted);line-height:1.7;max-width:640px;margin:0 auto 3rem;font-weight:300;animation:fadeUp 0.8s 0.8s ease both}
+.hero-sub strong{color:var(--text);font-weight:500}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.8s 1s ease both;margin-bottom:3rem}
+.btn-primary{display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;text-decoration:none;padding:0.85rem 2rem;border-radius:100px;font-weight:600;font-size:0.9rem;letter-spacing:0.01em;transition:all 0.3s;border:none;cursor:none;position:relative;overflow:hidden}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent),var(--purple));opacity:0;transition:opacity 0.3s}
+.btn-primary:hover::before{opacity:1}
+.btn-primary span{position:relative;z-index:1}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(59,130,246,0.3)}
+.btn-outline{display:inline-flex;align-items:center;gap:0.5rem;background:transparent;color:var(--text);text-decoration:none;padding:0.85rem 2rem;border-radius:100px;font-weight:500;font-size:0.9rem;border:1px solid var(--border);transition:all 0.3s;cursor:none}
+.btn-outline:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.04);transform:translateY(-2px)}
+.hero-socials{display:flex;gap:1rem;justify-content:center;animation:fadeUp 0.8s 1.2s ease both}
+.social-icon{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all 0.3s;font-size:0.9rem;position:relative;overflow:hidden}
+.social-icon::before{content:'';position:absolute;inset:0;background:var(--primary);opacity:0;transition:opacity 0.3s}
+.social-icon svg{position:relative;z-index:1;transition:color 0.3s}
+.social-icon:hover::before{opacity:0.15}
+.social-icon:hover{border-color:rgba(59,130,246,0.4);color:var(--primary);transform:translateY(-3px)}
+.scroll-indicator{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;animation:fadeUp 0.8s 1.5s ease both;color:var(--muted);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--primary),transparent);animation:scrollLine 1.5s ease infinite}
+@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* SECTIONS */
+section{padding:7rem 2rem}
+.container{max-width:1200px;margin:0 auto}
+.section-label{font-size:0.72rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--primary);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem}
+.section-label::before{content:'';width:24px;height:1px;background:var(--primary)}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-0.03em;line-height:1.05;margin-bottom:1.5rem}
+.gradient-text{background:linear-gradient(135deg,var(--text) 0%,var(--primary) 60%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ABOUT */
+#about{background:linear-gradient(180deg,var(--bg) 0%,var(--surface) 50%,var(--bg) 100%)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:3rem}}
+.about-visual{position:relative}
+.about-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:24px;padding:2.5rem;position:relative;overflow:hidden}
+.about-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent)}
+.about-avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:#fff;margin-bottom:1.5rem;position:relative;margin:0 auto 1.5rem}
+.about-avatar::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1px solid rgba(59,130,246,0.3);animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+.stat-item{text-align:center;padding:1.25rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.12);border-radius:16px}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:0.75rem;color:var(--muted);margin-top:0.25rem;font-weight:500}
+.about-text p{color:var(--muted);line-height:1.85;margin-bottom:1.25rem;font-size:1rem}
+.about-text p:last-child{margin-bottom:0}
+.highlight{color:var(--text);font-weight:500}
+.about-traits{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:2rem}
+.trait{padding:0.4rem 1rem;border-radius:100px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18);font-size:0.8rem;color:var(--primary);font-weight:500}
+
+/* TIMELINE */
+#experience{position:relative}
+.timeline{position:relative;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--primary),var(--accent),transparent)}
+.timeline-item{position:relative;padding-left:2.5rem;padding-bottom:3.5rem}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-dot{position:absolute;left:-2rem;top:0.25rem;width:12px;height:12px;border-radius:50%;background:var(--primary);border:2px solid var(--bg);box-shadow:0 0 0 4px rgba(59,130,246,0.2);transform:translateX(-50%)}
+.timeline-dot.accent{background:var(--accent);box-shadow:0 0 0 4px rgba(6,182,212,0.2)}
+.timeline-dot.purple{background:var(--purple);box-shadow:0 0 0 4px rgba(139,92,246,0.2)}
+.timeline-content{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:20px;padding:1.75rem;transition:all 0.4s;position:relative;overflow:hidden}
+.timeline-content::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--primary),transparent);opacity:0;transition:opacity 0.3s}
+.timeline-content:hover{border-color:rgba(59,130,246,0.2);transform:translateX(4px)}
+.timeline-content:hover::before{opacity:1}
+.timeline-period{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem;font-family:'DM Mono',monospace}
+.timeline-role{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:0.25rem}
+.timeline-company{font-size:0.875rem;color:var(--muted);margin-bottom:1rem}
+.timeline-desc{font-size:0.9rem;color:var(--muted);line-height:1.7}
+.timeline-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem}
+.tag{padding:0.3rem 0.75rem;border-radius:100px;background:rgba(255,255,255,0.04);border:1px solid var(--border);font-size:0.72rem;color:var(--muted);font-family:'DM Mono',monospace}
+
+/* SKILLS */
+#skills{background:linear-gradient(180deg,var(--bg) 0%,var(--surface) 50%,var(--bg) 100%)}
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem}
+@media(max-width:768px){.skills-grid{grid-template-columns:1fr}}
+.skill-category{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:24px;padding:2rem;position:relative;overflow:hidden;transition:all 0.4s}
+.skill-category::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(59,130,246,0.06),transparent 60%);pointer-events:none}
+.skill-category:last-child::before{background:radial-gradient(circle at top right,rgba(139,92,246,0.06),transparent 60%)}
+.skill-category:hover{border-color:rgba(59,130,246,0.2);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.3)}
+.skill-category-title{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--primary);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem}
+.skill-category-title svg{width:16px;height:16px}
+.skills-list{display:flex;flex-direction:column;gap:0.75rem}
+.skill-item{display:flex;align-items:center;justify-content:space-between}
+.skill-name{font-size:0.875rem;font-weight:500;color:var(--text)}
+.skill-bar{width:140px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+.skill-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width 1.5s cubic-bezier(0.16,1,0.3,1)}
+.skill-fill.purple{background:linear-gradient(90deg,var(--purple),var(--primary))}
+
+/* CONTACT */
+#contact{position:relative;overflow:hidden}
+#contact::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(59,130,246,0.08) 0%,transparent 70%);pointer-events:none}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}}
+.contact-headline{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:1.5rem}
+.contact-sub{color:var(--muted);line-height:1.7;margin-bottom:2rem;font-size:0.95rem}
+.contact-links{display:flex;flex-direction:column;gap:1rem}
+.contact-link{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--glass);border:1px solid var(--border);border-radius:16px;text-decoration:none;color:var(--text);transition:all 0.3s}
+.contact-link:hover{border-color:rgba(59,130,246,0.25);transform:translateX(4px);background:rgba(59,130,246,0.06)}
+.contact-link-icon{width:38px;height:38px;border-radius:10px;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.contact-link-text{font-size:0.85rem;color:var(--muted);margin-top:1px}
+.contact-link-label{font-size:0.95rem;font-weight:500}
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:0.4rem}
+.form-label{font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.form-input,.form-textarea{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:0.875rem 1.1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;width:100%;transition:all 0.3s;outline:none}
+.form-input:focus,.form-textarea:focus{border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.04);box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(148,163,184,0.4)}
+.form-textarea{height:130px;resize:none}
+.form-btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;padding:0.9rem 2rem;border-radius:100px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.9rem;cursor:none;transition:all 0.3s;position:relative;overflow:hidden}
+.form-btn:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(59,130,246,0.3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:3rem 2rem}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem}
+.footer-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;background:linear-gradient(135deg,#fff,var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-links{display:flex;gap:2rem;list-style:none}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+.footer-links a:hover{color:var(--text)}
+.footer-copy{color:var(--muted);font-size:0.8rem}
+.footer-socials{display:flex;gap:0.75rem}
+.footer-social{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all 0.3s;font-size:0.85rem}
+.footer-social:hover{border-color:rgba(59,130,246,0.3);color:var(--primary)}
+
+/* PARTICLES */
+.particle{position:absolute;border-radius:50%;background:var(--primary);animation:float linear infinite;pointer-events:none}
+@keyframes float{0%{transform:translateY(100vh) rotate(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100px) rotate(720deg);opacity:0}}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+
+/* GLOW ORB */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;animation:orbFloat 8s ease-in-out infinite}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-20px)}66%{transform:translate(-20px,15px)}}
+
+/* NOTIFICATION */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface);border:1px solid rgba(6,182,212,0.3);border-radius:16px;padding:1rem 1.5rem;display:flex;align-items:center;gap:0.75rem;transform:translateY(100px);opacity:0;transition:all 0.4s;z-index:500;font-size:0.875rem}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 1.5s infinite}
+
+/* MARQUEE */
+.marquee-section{padding:2rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;background:rgba(15,23,42,0.3)}
+.marquee-track{display:flex;gap:3rem;animation:marquee 20s linear infinite;white-space:nowrap;width:max-content}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.marquee-item{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:0.75rem}
+.marquee-dot{width:4px;height:4px;background:var(--primary);border-radius:50%}
+
+/* CANVAS BG */
+canvas{display:block}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="loader-name">Anmol Shukla</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-follower"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg">Message sent successfully!</span>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">AS</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="orb" style="width:400px;height:400px;background:rgba(59,130,246,0.12);top:10%;left:5%"></div>
+  <div class="orb" style="width:300px;height:300px;background:rgba(139,92,246,0.1);top:40%;right:5%;animation-delay:-3s"></div>
+  <div class="orb" style="width:250px;height:250px;background:rgba(6,182,212,0.08);bottom:10%;left:30%;animation-delay:-5s"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Available for opportunities
+    </div>
+    <h1 class="hero-name">ANMOL<br>SHUKLA</h1>
+    <p class="hero-tagline">• Developer &nbsp;•&nbsp; Import-Export Consultant</p>
+    <p class="hero-sub">I build <strong>businesses</strong>, digital experiences, and innovative solutions that create <strong>real-world impact</strong>.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary"><span>✉ Contact Me</span></a>
+      <a href="#" class="btn-outline" id="resumeBtn">↓ Download Resume</a>
+    </div>
+    <div class="hero-socials">
+      <a href="mailto:anmolshukla@email.com" class="social-icon" title="Email">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+      <a href="https://linkedin.com/in/anmolshukla" class="social-icon" title="LinkedIn" target="_blank">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="https://github.com/anmolshukla" class="social-icon" title="GitHub" target="_blank">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      </a>
+      <a href="https://wa.me/919650041950" class="social-icon" title="WhatsApp" target="_blank">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item"><span class="marquee-dot"></span>Developer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Import-Export Consultant</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Business Developer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Python Developer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>International Trade</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Problem Solver</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Entrepreneur</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Developer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Import-Export Consultant</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Business Developer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Python Developer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>International Trade</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Problem Solver</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Entrepreneur</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-card">
+          <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(59,130,246,0.12),transparent 70%);border-radius:50%;pointer-events:none"></div>
+          <div class="about-avatar">AS</div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;text-align:center;margin-bottom:0.25rem;letter-spacing:-0.02em">Anmol Shukla</h3>
+          <p style="text-align:center;color:var(--accent);font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.5rem">Developer & Consultant</p>
+          <div style="height:1px;background:var(--border);margin-bottom:1.5rem"></div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem">
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--muted)">
+              <span style="color:var(--primary)">📍</span> India
+            </div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--muted)">
+              <span style="color:var(--primary)">✉</span> anmolshukla@email.com
+            </div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--muted)">
+              <span style="color:var(--primary)">🌐</span> Open to Global Opportunities
+            </div>
+          </div>
+          <div class="stat-grid" style="grid-template-columns:1fr">
+            <div class="stat-item">
+              <div class="stat-num" data-target="6">0</div>
+              <div class="stat-label">Years Experience</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text reveal reveal-delay-2">
+        <div class="section-label">About Me</div>
+        <h2 class="section-title">A <span class="gradient-text">Multidisciplinary</span> Problem Solver</h2>
+        <p>I'm <span class="highlight">Anmol Shukla</span> — a developer and import-export consultant who operates at the intersection of technology and global commerce. I don't just write code or close deals; I architect systems that scale and build trade bridges that last.</p>
+        <p>With a deep passion for <span class="highlight">entrepreneurship</span>, I've built ventures from scratch, navigated international supply chains, and developed digital tools that automate real-world complexity. Every project I take on is driven by a singular obsession: <span class="highlight">creating tangible impact</span>.</p>
+        <p>Whether it's building Python automation scripts, designing web applications, or consulting on cross-border trade strategy — I bring the same rigorous thinking and creative execution to every challenge.</p>
+        <div class="about-traits">
+          <span class="trait">Tech Enthusiast</span>
+          <span class="trait">Import-Export Expert</span>
+          <span class="trait">Problem Solver</span>
+          <span class="trait">Entrepreneur</span>
+          <span class="trait">Lifelong Learner</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto 4rem" class="reveal">
+      <div class="section-label" style="justify-content:center">Experience</div>
+      <h2 class="section-title">My <span class="gradient-text">Journey</span> So Far</h2>
+      <p style="color:var(--muted);font-size:0.95rem;line-height:1.7">A track record of building ventures, delivering technical solutions, and creating impact across industries.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-period">2023 — Present</div>
+          <div class="timeline-role">Import-Export Consultant</div>
+          <div class="timeline-company">Soumya Enterprises</div>
+          <div class="timeline-desc">Contributing to a family-run trading enterprise specializing in import-export operations. Driving market research, building international partnerships, managing supply chain logistics, and supporting business growth through strategic client relationships.</div>
+          <div class="timeline-tags">
+            <span class="tag">International Trade</span>
+            <span class="tag">Supply Chain</span>
+            <span class="tag">Business Strategy</span>
+            <span class="tag">Client Management</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item reveal reveal-delay-1">
+        <div class="timeline-dot accent"></div>
+        <div class="timeline-content">
+          <div class="timeline-period">2022 — Present</div>
+          <div class="timeline-role">Independent Developer & Consultant</div>
+          <div class="timeline-company">Anmol Shukla</div>
+          <div class="timeline-desc">Providing end-to-end development and consulting services to SMEs and startups. Delivering custom web applications, automation tools, and business strategies that drive measurable growth for clients.</div>
+          <div class="timeline-tags">
+            <span class="tag">Web Development</span>
+            <span class="tag">Python</span>
+            <span class="tag">Consulting</span>
+            <span class="tag">AI Tools</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item reveal reveal-delay-2">
+        <div class="timeline-dot purple"></div>
+        <div class="timeline-content">
+          <div class="timeline-period">2022 — 2023</div>
+          <div class="timeline-role">Import-Export Projects Lead</div>
+          <div class="timeline-company">Various International Clients</div>
+          <div class="timeline-desc">Managed complex cross-border trade projects across Asia and Europe. Handled documentation, compliance, tariff optimization, and negotiated favorable terms with suppliers and buyers in multiple markets.</div>
+          <div class="timeline-tags">
+            <span class="tag">Market Research</span>
+            <span class="tag">Compliance</span>
+            <span class="tag">Negotiation</span>
+            <span class="tag">Logistics</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item reveal reveal-delay-3">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-period">2021 — 2022</div>
+          <div class="timeline-role">Technical Projects</div>
+          <div class="timeline-company">Personal & Freelance</div>
+          <div class="timeline-desc">Developed multiple technical projects including web scrapers, data analysis dashboards, and automation bots. Built portfolio of Python-based tools that solve real business problems efficiently.</div>
+          <div class="timeline-tags">
+            <span class="tag">Python</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Automation</span>
+            <span class="tag">Data Analysis</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto 4rem" class="reveal">
+      <div class="section-label" style="justify-content:center">Skills & Expertise</div>
+      <h2 class="section-title">What I <span class="gradient-text">Bring</span> to the Table</h2>
+      <p style="color:var(--muted);font-size:0.95rem;line-height:1.7">A rare combination of technical depth and business acumen, refined through real-world execution.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category reveal">
+        <div class="skill-category-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          Business Skills
+        </div>
+        <div class="skills-list">
+          <div class="skill-item">
+            <span class="skill-name">International Trade</span>
+            <div class="skill-bar"><div class="skill-fill" data-width="90" style="width:0%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Market Research</span>
+            <div class="skill-bar"><div class="skill-fill" data-width="85" style="width:0%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Business Development</span>
+            <div class="skill-bar"><div class="skill-fill" data-width="88" style="width:0%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Client Relations</span>
+            <div class="skill-bar"><div class="skill-fill" data-width="92" style="width:0%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Supply Chain Management</span>
+            <div class="skill-bar"><div class="skill-fill" data-width="80" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="skill-category reveal reveal-delay-1">
+        <div class="skill-category-title" style="color:var(--purple)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Technology Skills
+        </div>
+        <div class="skills-list">
+          <div class="skill-item">
+            <span class="skill-name">Python</span>
+            <div class="skill-bar"><div class="skill-fill purple" data-width="88" style="width:0%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">JavaScript</span>
+            <div class="skill-bar"><div class="skill-fill purple" data-width="80" style="width:0%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">AI Tools & Automation</span>
+            <div class="skill-bar"><div class="skill-fill purple" data-width="85" style="width:0%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Web Development</span>
+            <div class="skill-bar"><div class="skill-fill purple" data-width="82" style="width:0%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Data Analysis</span>
+            <div class="skill-bar"><div class="skill-fill purple" data-width="78" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="section-label">Get in Touch</div>
+        <h2 class="contact-headline">Let's Build Something <span class="gradient-text">Extraordinary</span> Together</h2>
+        <p class="contact-sub">Whether you're looking for a developer, an import-export consultant, or a business partner — I'm always excited to explore new opportunities and collaborations.</p>
+        <div class="contact-links">
+          <a href="mailto:anmolshukla@email.com" class="contact-link">
+            <div class="contact-link-icon">✉</div>
+            <div>
+              <div class="contact-link-label">Send an Email</div>
+              <div class="contact-link-text">anmolshukla@email.com</div>
+            </div>
+          </a>
+          <a href="https://linkedin.com/in/anmolshukla" class="contact-link" target="_blank">
+            <div class="contact-link-icon">in</div>
+            <div>
+              <div class="contact-link-label">LinkedIn Profile</div>
+              <div class="contact-link-text">linkedin.com/in/anmolshukla</div>
+            </div>
+          </a>
+          <a href="https://github.com/anmolshukla" class="contact-link" target="_blank">
+            <div class="contact-link-icon" style="font-size:0.9rem">GH</div>
+            <div>
+              <div class="contact-link-label">GitHub</div>
+              <div class="contact-link-text">github.com/anmolshukla</div>
+            </div>
+          </a>
+          <a href="https://wa.me/91XXXXXXXXXX" class="contact-link" target="_blank">
+            <div class="contact-link-icon">💬</div>
+            <div>
+              <div class="contact-link-label">WhatsApp</div>
+              <div class="contact-link-text">Direct message me</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div style="background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:24px;padding:2rem;position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent)"></div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:1.5rem;letter-spacing:-0.02em">Send a Message</h3>
+          <form class="contact-form" id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-input" placeholder="John" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-input" placeholder="Doe" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" placeholder="john@example.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subject</label>
+              <input type="text" class="form-input" placeholder="Project Collaboration">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea class="form-textarea" placeholder="Tell me about your project or opportunity..."></textarea>
+            </div>
+            <button type="submit" class="form-btn">Send Message →</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Anmol Shukla</div>
+    <ul class="footer-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="footer-socials">
+      <a href="mailto:anmolshukla@email.com" class="footer-social" title="Email">✉</a>
+      <a href="https://linkedin.com" class="footer-social" target="_blank" title="LinkedIn">in</a>
+      <a href="https://github.com" class="footer-social" target="_blank" title="GitHub">GH</a>
+    </div>
+    <div class="footer-copy">© 2025 Anmol Shukla. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// LOADER
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('hidden');
+  },2000);
+});
+
+// CURSOR
+const cursor=document.getElementById('cursor');
+const follower=document.getElementById('cursor-follower');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cursor.style.left=mx+'px';
+  cursor.style.top=my+'px';
+});
+function animateFollower(){
+  fx+=(mx-fx)*0.12;
+  fy+=(my-fy)*0.12;
+  follower.style.left=(fx-18)+'px';
+  follower.style.top=(fy-18)+'px';
+  requestAnimationFrame(animateFollower);
+}
+animateFollower();
+document.querySelectorAll('a,button,.timeline-content,.skill-category,.about-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cursor.style.transform='scale(2)';
+    follower.style.transform='scale(1.5)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cursor.style.transform='scale(1)';
+    follower.style.transform='scale(1)';
+  });
+});
+
+// NAV
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',window.scrollY>50);
+});
+
+// HAMBURGER
+const hamburger=document.getElementById('hamburger');
+const navLinks=document.getElementById('navLinks');
+hamburger.addEventListener('click',()=>navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+
+// HERO CANVAS
+const canvas=document.getElementById('heroCanvas');
+const ctx=canvas.getContext('2d');
+let w,h,particles=[];
+function resize(){
+  w=canvas.width=window.innerWidth;
+  h=canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener('resize',resize);
+class Particle{
+  constructor(){this.reset()}
+  reset(){
+    this.x=Math.random()*w;
+    this.y=Math.random()*h;
+    this.r=Math.random()*1.5+0.3;
+    this.vx=(Math.random()-0.5)*0.3;
+    this.vy=(Math.random()-0.5)*0.3;
+    this.opacity=Math.random()*0.5+0.1;
+    const colors=['#3B82F6','#06B6D4','#8B5CF6'];
+    this.color=colors[Math.floor(Math.random()*colors.length)];
+  }
+  update(){
+    this.x+=this.vx;this.y+=this.vy;
+    if(this.x<0||this.x>w||this.y<0||this.y>h)this.reset();
+  }
+  draw(){
+    ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=this.color;ctx.globalAlpha=this.opacity;ctx.fill();
+    ctx.globalAlpha=1;
+  }
+}
+for(let i=0;i<120;i++)particles.push(new Particle());
+// Draw connections
+function drawConnections(){
+  particles.forEach((p,i)=>{
+    particles.slice(i+1).forEach(q=>{
+      const dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);
+        ctx.strokeStyle='rgba(59,130,246,'+(1-d/120)*0.08+')';
+        ctx.lineWidth=0.5;ctx.stroke();
+      }
+    });
+  });
+}
+function animCanvas(){
+  ctx.clearRect(0,0,w,h);
+  drawConnections();
+  particles.forEach(p=>{p.update();p.draw()});
+  requestAnimationFrame(animCanvas);
+}
+animCanvas();
+
+// SCROLL REVEAL
+const reveals=document.querySelectorAll('.reveal');
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      // Animate skill bars
+      e.target.querySelectorAll('.skill-fill').forEach(bar=>{
+        setTimeout(()=>bar.style.width=bar.dataset.width+'%',300);
+      });
+      // Animate counters
+      e.target.querySelectorAll('[data-target]').forEach(el=>{
+        const target=parseInt(el.dataset.target);
+        let current=0;
+        const inc=target/40;
+        const timer=setInterval(()=>{
+          current+=inc;
+          if(current>=target){current=target;clearInterval(timer);}
+          el.textContent=Math.round(current)+(target>=10?'+':'');
+        },40);
+      });
+    }
+  });
+},{threshold:0.15});
+reveals.forEach(r=>observer.observe(r));
+
+// Animate skill bars when any parent becomes visible
+const skillObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.skill-fill').forEach(bar=>{
+        setTimeout(()=>bar.style.width=bar.dataset.width+'%',300);
+      });
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.skill-category').forEach(c=>skillObserver.observe(c));
+
+// CONTACT FORM
+document.getElementById('contactForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const btn=e.target.querySelector('.form-btn');
+  btn.textContent='Sending...';btn.disabled=true;
+  setTimeout(()=>{
+    btn.textContent='Send Message →';btn.disabled=false;
+    e.target.reset();
+    const toast=document.getElementById('toast');
+    document.getElementById('toast-msg').textContent='Message sent! I\'ll be in touch soon.';
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),4000);
+  },1500);
+});
+
+// RESUME BUTTON
+document.getElementById('resumeBtn').addEventListener('click',e=>{
+  e.preventDefault();
+  const toast=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent='Resume download will be available soon!';
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),3500);
+});
+
+// MAGNETIC BUTTONS
+document.querySelectorAll('.btn-primary,.btn-outline,.form-btn').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=(e.clientX-r.left-r.width/2)/r.width*15;
+    const y=(e.clientY-r.top-r.height/2)/r.height*15;
+    btn.style.transform=`translate(${x}px,${y}px) translateY(-2px)`;
+  });
+  btn.addEventListener('mouseleave',()=>{btn.style.transform='';});
+});
+</script>
+</body>
+</html>
